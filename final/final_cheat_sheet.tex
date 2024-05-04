@@ -6,6 +6,9 @@
 \usepackage{color,graphicx,overpic}
 \usepackage{enumitem}
 \usepackage{bm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 \definecolor{MyRoyalBlue}{RGB}{65,105,225} % RGB for Royal Blue
 \definecolor{SubsectionGreen}{RGB}{180, 175, 80} % A soft green
 % Turn off header and footer
@@ -336,5 +339,46 @@
     \begin{itemize}[label=*]
         \item True: It is not good machine learning practice to use the test set to help adjust the hyperparameters.
     \end{itemize}
+
+
+
+    \newpage
+
+
+    \section*{Decision Trees}
+    cuts x-space into rectangular cells, and works well with both categorical and quantitative features.
+
+    Two types of nodes:
+    \begin{enumerate}
+        \item \textbf{internal}: test feature values \& branch accordingly
+        \item \textbf{leaf}: they specify the class \( h(x) \)
+              \ruler
+    \end{enumerate}
+    \textbf{For classification} the learning algorithm is a greedy, top-down learning heuristic. Let S be subset of sample pts indices
+    \textbf{Learning algorithm}\\
+    % GrowTree(S)\\
+    % \-\hspace*{0.5cm} if (\( y_i = C \) for all \( i \in S \) and some class \( C \)) \{\\
+    % \-\hspace*{0.9cm} return new leaf(\( C \))\\
+    % \-\hspace*{0.5cm} \} else \{\\
+    % \-\hspace*{0.9cm} choose best splitting feature \( j \) and splitting value \( \beta \)\\
+    % \-\hspace*{0.9cm} \( S_L = \lbrace i \in S: X_{ij} < \beta \rbrace \) \\
+    % \-\hspace*{0.9cm} \( S_R = \lbrace i \in S: X_{ij} \ge \beta \rbrace \) \\
+    % \-\hspace*{0.9cm} return new node(\( j, \beta, \) GrowTree(\( S_L \)), GrowTree(\( S_R \)))\\
+    % \-\hspace*{0.5cm} \}
+
+    \begin{algorithmic}
+        \Function{GrowTree}{$S$}
+        \If{all $y_i = C$ for all $i \in S$ and some class $C$}
+        \State \Return \textit{new leaf}($C$)
+        \Else
+        \State Choose best splitting feature $j$ and splitting value $\beta$
+        \State $S_L = \{ i \in S: X_{ij} < \beta \}$
+        \State $S_R = \{ i \in S: X_{ij} \ge \beta \}$
+        \State \Return \textit{new node}($j, \beta,$ \Call{GrowTree}{$S_L$}, GrowTree($S_R$))
+        \EndIf
+        \EndFunction
+    \end{algorithmic}
 \end{multicols*}
+
+
 \end{document}
