@@ -1,11 +1,11 @@
 \documentclass[10pt,landscape]{article}
 \usepackage{multicol}
 \usepackage{calc}
-\usepackage[landscape]{geometry}
 \usepackage{amsmath,amsthm,amsfonts,amssymb,relsize}
 \usepackage{color,graphicx,overpic}
 \usepackage{enumitem}
 \usepackage{bm}
+\usepackage[cheatsheet]{preamble}
 \definecolor{MyRoyalBlue}{RGB}{65,105,225} % RGB for Royal Blue
 \definecolor{SubsectionGreen}{RGB}{180, 175, 80} % A soft green
 % Turn off header and footer
@@ -38,11 +38,11 @@
 
 \input{../math_commands.tex}
 
-\newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
+\newcommand{\ruler}{\\\rule{\linewidth}{0.25pt}\\}
 
 % -----------------------------------------------------------------------
 \begin{document}
-\raggedright
+\raggedright%
 \footnotesize
 \begin{multicols*}{3}
     % multicol parameters
@@ -69,7 +69,7 @@
         \nabla_{\bm{x}} (\bm{y} \cdot \bm{z}) & = (\nabla_{\bm{x}}) \bm{z} + (\nabla_{\bm{x}}) \bm{y} & \nabla_{\bm{x}} f(\bm{y}) & = (\nabla_{\bm{x}} \bm{y}) (\nabla_{\bm{y}} f(\bm{y})) \\
         \nabla_w w^TAw                        & = (A + A^T)w                                          & \bH_{i,j}                 & = \frac{\partial^2 f}{\partial x_i \partial x_j}
     \end{align*}
-    \section{Perceptron}
+    \section{Perceptron (Lecture 2)}
     $f(\bx) = \mathbf{w} \cdot \bx + \alpha = \sum_{i=1}^{d}w_ix_i + \alpha$,
 
 
@@ -95,7 +95,7 @@
     $J(\mathbf{w}) = \sum_{i}(-y_i(\mathbf{w}\cdot\bx_i))_{+}$ with $\mathbf{w} \leftarrow \mathbf{w} - \eta\nabla J(\mathbf{w})$
     % --------------------------------
 
-    \section{Support Vector Machine}
+    \section{Support Vector Machine (Lecture 3, 4)}
     \textbf{Hard margin SVM},\\
     This method makes the margin as wide as possible.
     The signed distance from the hyperplane to $X_i$ is$\frac{f(\bx_i)}{\lVert w \rVert}$
@@ -111,7 +111,7 @@
     Small C: focus on large margin, less tendency to overfit.
     Overfitting increases with: less data, more features.
     % --------------------------------
-    \section{Decision Theory}
+    \section{Decision Theory (Lecture 6)}
     \textbf{Bayes Theorem:} \( \underbrace{P(Y = C | X)}_{\text{Poster. Prob}} = \frac{P(X | Y = C) \overbrace{P(Y = C)}^{\text{Prior Prob.}}}{P(X)} \)
     Assume $(\bX, \bY)$ are chosen i.i.d according to some probability distribution on $\mathcal{X}\times\mathcal{Y}$.
     \textbf{Risk} is misclassification probability: $R(r) = \E (L(r(\bX), \bY)) = Pr(r(\bX)
@@ -141,7 +141,7 @@
     $R(f) - R(f*) = \E[(f(\bX) - f^*(\bX))^2]$, $f^*(\bX) = \E[\bY|\bX]$\\
     % --------------------------------
 
-    \section{Generative and Discriminative}
+    \section{Generative and Discriminative Models (Lecture 6)}
     \textbf{Discriminative models}: $P(\bX, \bY) = P(\bX)P(\bY|\bX)$.\\
     Estimate $P(\bY|\bX)$, then pretend out estimate $\hat{P}(\bY|\bX)$ is the actual $P(\bY|\bX)$ and
     plug in bayes rule expression.
@@ -154,7 +154,7 @@
     $\mathbf{w} = \inv{\Sigma}(\bmu_{1}-\bmu_{0})$, $\beta_0=\frac{\tp{\bmu_{0}}\inv{\Sigma}\bmu0-\bmu_{1}\inv{\Sigma}\bmu1}{2}+\log\frac{P(Y=1)}{P(Y=0)}$
     % --------------------------------
 
-    \section{Multivariate Normal Distribution}
+    \section{Multivariate Normal Distribution (Lecture 7)}
     $\inR{\bx}{d}: p(x) = \frac{1}{(2\pi)^{d/2}|\bSigma|^{1/2}}e^{(-\frac{1}{2}\tp{(\bx-\bmu)}\inv{\bSigma}(\bx-\bmu))}$
     \ruler
     \textbf{QDA:} Class-conditional densities \( X_C \sim \gaussian(\mathbf{\mu}_C, \Sigma_C)\). Optimal decision rule \( r^*(x) \) for 0-1 loss: Choose class \textbf{C} that maxes \( P(Y = C|X) \propto f_C(x)\pi_C \). Parameters estimated via MLE:
@@ -185,8 +185,15 @@
         \item \textbf{Covariance:} \( \hat{\Sigma}_C = \frac{1}{N_C} \sum\limits_{i:Y_i = C} (X_i - \hat{\mu}_C)(X_i - \hat{\mu}_C)^\top \)
         \item \textbf{Pooled Cov:} \( \hat{\Sigma} = \frac{1}{n} \sum\limits_{C_k} \sum\limits_{i:Y_i = C_k} (X_i - \hat{\mu}_{C_k})(X_i - \hat{\mu}_{C_k})^\top \)
     \end{itemize}
+    \section{Discriminant Analysis (Lecture 7)}
+    \textbf{Discriminant Fn (For LDA and QDA):}
+    \( Q_C(\mathbf{x}) = \ln \left( (2\pi)^{-\frac{d}{2}} f_{\mathbf{X}|Y=C}(\mathbf{x}) \pi_C \right) = -\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}_C)^T \boldsymbol{\Sigma}_C^{-1} (\mathbf{x} - \boldsymbol{\mu}_C) - \frac{1}{2}\ln |\boldsymbol{\Sigma}_C| + \ln \pi_C.
+    \)
+    \ruler
+    \textbf{For Multi-class LDA: choose $C$ that maxes linear \( Q_C \)}:\\
+    $\boldsymbol{\mu}_C^T \boldsymbol{\Sigma}^{-1} \mathbf{x} - \frac{1}{2} \boldsymbol{\mu}_C^T \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}_C + \ln \pi_C$
 
-    \section{Linear Regression}
+    \section{Linear Regression (Lecture 10)}
     \subsection{Empirical risk minimization}
     \textbf{Empirical risk} is the sample average of squared error:\\
     $\hat{R}(r) = \hat{\E}_n L(r(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(r(\bX_i) - Y_i)^2$\\
@@ -223,25 +230,9 @@
     $P(\mathbf{w}|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto P(Y_1,\dots,Y_n|\mathbf{w},\bX_1,\dots,\bX_n)P(\mathbf{w})$\\
     $P(\mathbf{w}|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto exp(-\frac{1}{2}(\sum_{i=1}^{n}\frac{(Y_i-\tp{\bX}_i\mathbf{w})^2}{\sigma^2}+\frac{1}{\tau^2}\norm{\mathbf{w}}^2))$
     % --------------------------------
-    \section{Linear Regression Regularization}
-    \textbf{Trading off bias and variance}: some increase in bias can give a big decrease in variance
-    \ruler
-    \textbf{Ridge regression} is like $L2$ regularization:
-    $\hat{\mathbf{w}} = \text{arg }\min_{\mathbf{w}}(\sum_{i=1}^n(y_i-\tp{\bx}_i\mathbf{w})^2 + \lambda\sum_{j=1}{p}\beta_j^2)$\\
-    $\hat{\mathbf{w}}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
-    \ruler
-    \textbf{Lasso regression} is like $L1$ regularization:
-    $\hat{\mathbf{w}} = \text{arg }\min_{\mathbf{w}}(\sum_{i=1}^n(y_i-\tp{\bx}_i\mathbf{w})^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
-    % \ruler
-    While ridge regression leads to reduced, but rare non-zero values of the weights,
-    Lasso regression forces some weights to be zero.
-    \ruler
-    \textbf{Bayesian analysis}:
-    Ridge regression is equivalent to a MAP estimate with a gaussian prior.
-    Lasso regression is equivalent to a MAP estimate with a Laplace prior.
-    % --------------------------------
 
-    \section{Logistic Regression}
+
+    \section{Logistic Regression (Lecture 10, 11)}
     $P(Y=1|\bx)=\frac{1}{1+\text{exp}(-\tp{\mathbf{w}}\bx)} = \sigma(\tp{\mathbf{w}}\bx)$
 
     Given data $(\bX_1, Y_1),\dots,(\bX_n, Y_n) \in \R^{d} \times \{0,1\}$,
@@ -262,19 +253,28 @@
     \textbf{Newton's method}:\\
     $\mathbf{w}^{(t+1)}=\mathbf{w}^{(t)} - \inv{[\nabla_{\mathbf{w}}^2 R(\mathbf{w}^{(t)})]}\nabla_{\mathbf{w}}R(\mathbf{w}^{(t)})$
     \ruler
-    \section{Discriminant Analysis}
-    \textbf{Discriminant Fn (For LDA and QDA):}
-    \( Q_C(\mathbf{x}) = \ln \left( (2\pi)^{-\frac{d}{2}} f_{\mathbf{X}|Y=C}(\mathbf{x}) \pi_C \right) = -\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}_C)^T \boldsymbol{\Sigma}_C^{-1} (\mathbf{x} - \boldsymbol{\mu}_C) - \frac{1}{2}\ln |\boldsymbol{\Sigma}_C| + \ln \pi_C.
-    \)
-    \ruler
-    \textbf{For Multi-class LDA: choose $C$ that maxes linear \( Q_C \)}:\\
-    $\boldsymbol{\mu}_C^T \boldsymbol{\Sigma}^{-1} \mathbf{x} - \frac{1}{2} \boldsymbol{\mu}_C^T \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}_C + \ln \pi_C$
-    \ruler
     \textbf{Linear Decision Function:}
 
     \( Q_C(\mathbf{x}) - Q_D(\mathbf{x}) = \underbrace{(\boldsymbol{\mu}_C - \boldsymbol{\mu}_D)^T \boldsymbol{\Sigma}^{-1} \mathbf{x}}_{\mathbf{w}^T \mathbf{x}} \underbrace{- \frac{1}{2} \boldsymbol{\mu}_C^T \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}_C - \frac{1}{2} \boldsymbol{\mu}_D^T \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}_D + \ln \pi_C - \ln \pi_D}_{\alpha}.
     \)
     \ruler
+    \section{Linear Regression Regularization (Lecture 13)}
+    \textbf{Trading off bias and variance}: some increase in bias can give a big decrease in variance
+    \ruler
+    \textbf{Ridge regression} is like $L2$ regularization:
+    $\hat{\mathbf{w}} = \text{arg }\min_{\mathbf{w}}(\sum_{i=1}^n(y_i-\tp{\bx}_i\mathbf{w})^2 + \lambda\sum_{j=1}{p}\beta_j^2)$\\
+    $\hat{\mathbf{w}}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
+    \ruler
+    \textbf{Lasso regression} is like $L1$ regularization:
+    $\hat{\mathbf{w}} = \text{arg }\min_{\mathbf{w}}(\sum_{i=1}^n(y_i-\tp{\bx}_i\mathbf{w})^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
+    % \ruler
+    While ridge regression leads to reduced, but rare non-zero values of the weights,
+    Lasso regression forces some weights to be zero.
+    \ruler
+    \textbf{Bayesian analysis}:
+    Ridge regression is equivalent to a MAP estimate with a gaussian prior.
+    Lasso regression is equivalent to a MAP estimate with a Laplace prior.
+    % --------------------------------
     \section*{Misc}
     \begin{itemize}
         \item \textbf{Centering} $\mathbf{X}$: This involves subtracting $\boldsymbol{\mu}^T$ from each row of $\mathbf{X}$. Symbolically, $\mathbf{X}$ transforms into $\bar{\mathbf{X}}$.
@@ -286,55 +286,5 @@
 
     \section*{ROC Curves}
     \includegraphics[scale=0.5]{./images/ROC-curve.png}
-    \section*{Past Exams Q/A}
-    \subsubsection*{Support Vector Machine}
-    \begin{itemize}[label=*]
-        \item True: If the data is not linearly separable, there is no solution to hard margin SVM.
-        \item True: Complementarity slackness implies that every training point that is misclassified by a soft margin SVM is a support vector.
-        \item True: When we solve the SVM with the dual problem, we need only the dot product of \(x_i\) and \(x_j\) for all \(i, j\).
-    \end{itemize}
-    \includegraphics[scale=0.45]{./images/transformations.png}
-
-
-    \subsubsection*{Logistic Regression}
-    \begin{itemize}[label=*]
-        \item True: Logistic regression can be used for classification.
-        \item Logistic regression can be motivated from log odds equated to an affine function of \(x\) and generative models with gaussian class conditionals.
-    \end{itemize}
-
-    \subsubsection*{Linear Regression}
-    \begin{itemize}[label=*]
-        \item L2 regularization is equivalent to imposing a Gaussian prior in linear regression.
-        \item If we have 2 two-dimensional Gaussians, the same covariance matrix for both will result in a linear decision boundary.
-        \item The normal equations can be derived from minimizing empirical risk, assuming normally distributed noise, and assuming \(P(Y | X)\) is distributed normally with mean \(B^\top X\) and variance \(\sigma^2\).
-    \end{itemize}
-
-    \subsubsection*{Perceptron}
-    \begin{itemize}[label=*]
-        \item The perceptron algorithm will converge only if the data is linearly separable.
-    \end{itemize}
-
-    \subsubsection*{Decision Theory}
-    \begin{itemize}[label=*]
-        \item True: a discriminative classifier explicitly models \(P(Y | X)\).
-    \end{itemize}
-
-    \subsubsection*{Optimization}
-    \begin{itemize}[label=\( \cdot \)]
-        \item True: Newton’s method is typically more expensive to calculate than gradient descent per iteration.
-        \item True: for quadratic equations, Newton’s method typically requires fewer iterations than gradient descent.
-        \item False: Gradient descent can be viewed as iteratively reweighted least squares.
-        \item True: we use Lagrange multipliers in an optimization problem with inequality constraints.
-    \end{itemize}
-
-    \subsubsection*{Multivariate Gaussian}
-    \begin{itemize}[label=*]
-        \item False: For multivariate gaussian, the eigenvalues of the covariance matrix are inversely proportional to the lengths of the ellipsoid axes that determine the isocontours of the density.
-    \end{itemize}
-
-    \subsubsection*{General Machine Learning Practices}
-    \begin{itemize}[label=*]
-        \item True: It is not good machine learning practice to use the test set to help adjust the hyperparameters.
-    \end{itemize}
 \end{multicols*}
 \end{document}
